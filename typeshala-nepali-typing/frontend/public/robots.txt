@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://typeshala.shresthasushil.com.np/sitemap.xml
