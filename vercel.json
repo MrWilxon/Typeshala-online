@@ -1,6 +1,0 @@
-{
-  "framework": "nextjs",
-  "buildCommand": "cd typeshala-nepali-typing/frontend && npm run build",
-  "outputDirectory": "typeshala-nepali-typing/frontend/.next",
-  "installCommand": "cd typeshala-nepali-typing/frontend && npm install"
-}
