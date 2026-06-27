@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Noto_Sans_Devanagari } from "next/font/google";
+import { SITE, SEO_KEYWORDS, ICON_SVG } from "@/lib/seo";
 import "./globals.css";
 
 const inter = Inter({
@@ -16,59 +17,23 @@ const notoSansDevanagari = Noto_Sans_Devanagari({
 
 export const metadata: Metadata = {
   title: {
-    default:
-      "Typeshala - Free Online Nepali Typing Tutor | Learn Nepali Typing",
+    default: SITE.title,
     template: "%s | Typeshala - Nepali Typing Tutor",
   },
   icons: {
-    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236366f1'/><text x='50' y='68' text-anchor='middle' font-size='55' fill='white' font-family='sans-serif' font-weight='bold'>ट</text></svg>",
-    apple:
-      "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236366f1'/><text x='50' y='68' text-anchor='middle' font-size='55' fill='white' font-family='sans-serif' font-weight='bold'>ट</text></svg>",
+    icon: ICON_SVG,
+    apple: ICON_SVG,
   },
-  description:
-    "Typeshala is the best free online Nepali typing tutor. Learn Nepali typing with Preeti keyboard and English keyboard layouts. Practice typing, improve your WPM speed, and master Nepali typing step by step. नेपाली टाइपिङ सिक्नुहोस् - Typeshala डाउनलोड गर्नुहोस्।",
-  keywords: [
-    "Typeshala",
-    "Online Typeshala",
-    "Typeshala download",
-    "Typeshala for PC",
-    "Official Nepali Typeshala",
-    "Typeshala online",
-    "Online Typing",
-    "Learn Nepali typing",
-    "Nepali typing practice",
-    "How to improve Nepali typing speed",
-    "Nepali typing tutor for beginners",
-    "Step-by-step Nepali typing lessons",
-    "Best software to learn Nepali typing",
-    "Nepali Romanized typing tutor",
-    "Nepali Traditional keyboard practice",
-    "Nepali typing WPM test",
-    "Typeshala alternative",
-    "Modern Nepali typing tutor",
-    "Web-based Typeshala",
-    "Nepali typing game",
-    "Best typing tutor for Nepali language",
-    "Nepali typing tutor",
-    "Preeti keyboard",
-    "Nepali keyboard layout",
-    "free typing tutor Nepal",
-    "नेपाली टाइपिङ",
-    "टाइपिङ सिक्नुहोस्",
-    "Nepali typing online",
-    "Nepali typing for beginners",
-    "Nepali typing speed test",
-  ],
+  description: SITE.description,
+  keywords: SEO_KEYWORDS.nepali,
   authors: [{ name: "Typeshala" }],
   creator: "Typeshala",
   publisher: "Typeshala",
-  metadataBase: new URL("https://typeshala.wilson.com.np"),
+  metadataBase: new URL(SITE.url),
   openGraph: {
-    title:
-      "Typeshala - Free Online Nepali Typing Tutor | Learn Nepali Typing",
+    title: SITE.title,
     description:
       "Learn Nepali typing online with Typeshala. Practice Preeti and English keyboard layouts with real-time accuracy tracking. Free interactive typing tutor for Nepali language learners.",
-    url: "https://typeshala.wilson.com.np",
     siteName: "Typeshala - Nepali Typing Tutor",
     locale: "ne_NP",
     alternateLocale: "en_US",
@@ -92,13 +57,12 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://typeshala.wilson.com.np",
+    canonical: "/",
     languages: {
-      ne: "https://typeshala.wilson.com.np",
-      en: "https://typeshala.wilson.com.np/en",
+      ne: "/",
+      en: "/en",
     },
   },
-  verification: {},
 };
 
 const jsonLd = {
@@ -111,7 +75,7 @@ const jsonLd = {
     "Nepali Typeshala",
     "Typeshala Nepali Typing",
   ],
-  url: "https://typeshala.wilson.com.np",
+  url: SITE.url,
   description:
     "Free interactive Nepali typing tutor supporting Preeti and English keyboard layouts. Learn Nepali typing step by step with lessons, WPM tests, and real-time feedback.",
   applicationCategory: "EducationalApplication",
@@ -133,10 +97,6 @@ const jsonLd = {
     "Achievement system",
     "High score leaderboard",
   ],
-  softwareHelp: {
-    "@type": "CreativeWork",
-    url: "https://typeshala.wilson.com.np",
-  },
 };
 
 export default function RootLayout({
@@ -148,17 +108,16 @@ export default function RootLayout({
     <html
       lang="ne"
       className={`${inter.variable} ${notoSansDevanagari.variable}`}
+      suppressHydrationWarning
     >
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#6366f1" />
-        <link rel="canonical" href="https://typeshala.wilson.com.np" />
       </head>
-      <body suppressHydrationWarning>{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

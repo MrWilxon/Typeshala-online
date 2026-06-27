@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo } from "react";
+
 interface FingerGuideProps {
   keyboardType: string;
   theme: "light" | "dark";
@@ -145,7 +147,7 @@ export default function FingerGuide({ keyboardType, theme, activeKey, nextKeyCha
   const keyMap = keyboardType === "traditional" ? nepaliKeyToFinger : englishKeyToFinger;
 
   const activeFinger = activeKey ? keyMap[activeKey] : undefined;
-  const activeFingers = new Set<FingerId>(activeFinger ? [activeFinger] : []);
+  const activeFingers = useMemo(() => new Set<FingerId>(activeFinger ? [activeFinger] : []), [activeFinger]);
 
   let nextFinger: FingerId | null = null;
   let nextFingerHand: "Left" | "Right" = "Left";

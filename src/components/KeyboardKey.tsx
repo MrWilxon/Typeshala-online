@@ -56,6 +56,10 @@ export default memo(function KeyboardKey({ data, selected, isNextKey, keyboardTy
     <div
       ref={keyRef}
       onClick={handleClick}
+      role="button"
+      tabIndex={0}
+      aria-label={data.special ? data.special : data.mainChar}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleClick(e as unknown as React.MouseEvent); } }}
       onTouchEnd={(e) => {
         e.preventDefault();
         const touch = e.changedTouches[0];

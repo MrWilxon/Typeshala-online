@@ -56,21 +56,22 @@ const achievements: Achievement[] = [
 
 export function checkAchievements(): { unlocked: string[]; newlyUnlocked: Achievement[] } {
   const stats = loadStats();
-  const unlocked = loadUnlockedAchievements();
+  const unlockedIds = loadUnlockedAchievements();
+  const unlockedSet = new Set(unlockedIds);
   const newlyUnlocked: Achievement[] = [];
 
   achievements.forEach((a) => {
-    if (!unlocked.includes(a.id) && a.condition(stats)) {
-      unlocked.push(a.id);
+    if (!unlockedSet.has(a.id) && a.condition(stats)) {
+      unlockedSet.add(a.id);
       newlyUnlocked.push(a);
     }
   });
 
   if (newlyUnlocked.length > 0) {
-    saveUnlockedAchievements(unlocked);
+    saveUnlockedAchievements(Array.from(unlockedSet));
   }
 
-  return { unlocked, newlyUnlocked };
+  return { unlocked: Array.from(unlockedSet), newlyUnlocked };
 }
 
 export default function Achievements({ theme, refreshKey }: AchievementsProps) {
@@ -84,11 +85,6 @@ export default function Achievements({ theme, refreshKey }: AchievementsProps) {
   useEffect(() => {
     refresh();
   }, [refresh, refreshKey]);
-
-  useEffect(() => {
-    const interval = setInterval(refresh, 2000);
-    return () => clearInterval(interval);
-  }, [refresh]);
 
   const isDark = theme === "dark";
   const stats = loadStats();

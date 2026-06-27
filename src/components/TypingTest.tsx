@@ -151,16 +151,14 @@ export default function TypingTest({ keyboardType, theme, onComplete }: TypingTe
       if (e.key === "Escape") return;
       if (e.key === "Tab") { e.preventDefault(); return; }
 
-      const keyCode = e.which || e.keyCode;
-
-      if (keyCode === 16) {
+      if (e.key === "Shift") {
         shiftHeldRef.current = true;
         return;
       }
 
       resumeAudioContext();
 
-      setActiveKey(keyCode);
+      setActiveKey(e.keyCode);
 
       if (e.key === "Backspace") {
         e.preventDefault();
@@ -204,11 +202,10 @@ export default function TypingTest({ keyboardType, theme, onComplete }: TypingTe
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
-      const keyCode = e.which || e.keyCode;
-      if (keyCode === 16) {
+      if (e.key === "Shift") {
         shiftHeldRef.current = false;
       }
-      if (shiftHeldRef.current && keyCode !== 16) {
+      if (shiftHeldRef.current && e.key !== "Shift") {
         return;
       }
       setActiveKey(0);

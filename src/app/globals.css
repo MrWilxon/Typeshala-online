@@ -19,6 +19,8 @@
   --surface: #ffffff;
   --text: #0f172a;
   --muted: #94a3b8;
+  --muted-dark: #94a3b8;
+  --muted-light: #64748b;
   --border: rgba(0, 0, 0, 0.08);
   --radius-sm: 6px;
   --radius-md: 12px;
@@ -39,6 +41,8 @@
   --surface: #1e293b;
   --text: #f1f5f9;
   --muted: #64748b;
+  --muted-dark: #94a3b8;
+  --muted-light: #64748b;
   --border: rgba(255, 255, 255, 0.08);
 }
 

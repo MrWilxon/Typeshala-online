@@ -51,7 +51,7 @@ export function HighScores({ scores, theme }: HighScoresProps) {
               </thead>
               <tbody>
                 {scores.map((s, i) => (
-                  <tr key={i} style={{ borderBottom: `1px solid ${isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.03)"}`, transition: "background var(--transition)" }}>
+                  <tr key={`${s.wpm}-${s.setType}-${i}`} style={{ borderBottom: `1px solid ${isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.03)"}`, transition: "background var(--transition)" }}>
                     <td style={{ padding: "8px 12px", color: isDark ? "var(--muted-dark)" : "var(--muted-light)", fontSize: 11 }}>{i + 1}</td>
                     <td style={{ padding: "8px 12px", fontWeight: 600, color: "var(--primary)" }}>{s.wpm}</td>
                     <td style={{ padding: "8px 12px" }}>{s.accuracy}%</td>

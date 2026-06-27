@@ -29,7 +29,7 @@ export default memo(function Keyboard({ activeKey, keyboardType, onKeyClick, nex
   const isSecondaryKey = !!secondaryKeys[activeKey];
 
   return (
-    <div style={{ userSelect: "none" }}>
+    <div style={{ userSelect: "none" }} data-keyboard>
       {layout.map((row, index) => (
         <KeyboardRow
           key={index}

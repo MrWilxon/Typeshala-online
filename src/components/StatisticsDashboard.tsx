@@ -69,38 +69,46 @@ export function exportStatsCSV() {
   URL.revokeObjectURL(url);
 }
 
+let statsLock = false;
+
 export function recordSession(wpm: number, accuracy: number, wordsTyped: number, timeSeconds: number) {
-  const stats = loadStats();
-  stats.totalSessions++;
-  stats.totalWordsTyped += wordsTyped;
-  stats.totalTimeTyped += timeSeconds;
+  if (statsLock) return;
+  statsLock = true;
+  try {
+    const stats = loadStats();
+    stats.totalSessions++;
+    stats.totalWordsTyped += wordsTyped;
+    stats.totalTimeTyped += timeSeconds;
 
-  const totalWpm = stats.averageWpm * (stats.totalSessions - 1) + wpm;
-  stats.averageWpm = Math.round(totalWpm / stats.totalSessions);
+    const totalWpm = stats.averageWpm * (stats.totalSessions - 1) + wpm;
+    stats.averageWpm = Math.round(totalWpm / stats.totalSessions);
 
-  if (wpm > stats.bestWpm) stats.bestWpm = wpm;
+    if (wpm > stats.bestWpm) stats.bestWpm = wpm;
 
-  const totalAcc = stats.averageAccuracy * (stats.totalSessions - 1) + accuracy;
-  stats.averageAccuracy = Math.round(totalAcc / stats.totalSessions);
+    const totalAcc = stats.averageAccuracy * (stats.totalSessions - 1) + accuracy;
+    stats.averageAccuracy = Math.round(totalAcc / stats.totalSessions);
 
-  if (accuracy > stats.bestAccuracy) stats.bestAccuracy = accuracy;
+    if (accuracy > stats.bestAccuracy) stats.bestAccuracy = accuracy;
 
-  const today = new Date().toISOString().split("T")[0];
-  if (!stats.dailyStats[today]) {
-    stats.dailyStats[today] = { wpm: 0, accuracy: 0, sessions: 0 };
+    const today = new Date().toISOString().split("T")[0];
+    if (!stats.dailyStats[today]) {
+      stats.dailyStats[today] = { wpm: 0, accuracy: 0, sessions: 0 };
+    }
+    const daily = stats.dailyStats[today];
+    const dailyWpm = daily.wpm * daily.sessions + wpm;
+    daily.sessions++;
+    daily.wpm = Math.round(dailyWpm / daily.sessions);
+    const dailyAcc = daily.accuracy * (daily.sessions - 1) + accuracy;
+    daily.accuracy = Math.round(dailyAcc / daily.sessions);
+
+    if (!stats.recentSessions) stats.recentSessions = [];
+    stats.recentSessions.unshift({ wpm, accuracy, timestamp: Date.now(), wordsTyped });
+    if (stats.recentSessions.length > 20) stats.recentSessions = stats.recentSessions.slice(0, 20);
+
+    saveStats(stats);
+  } finally {
+    statsLock = false;
   }
-  const daily = stats.dailyStats[today];
-  const dailyWpm = daily.wpm * daily.sessions + wpm;
-  daily.sessions++;
-  daily.wpm = Math.round(dailyWpm / daily.sessions);
-  const dailyAcc = daily.accuracy * (daily.sessions - 1) + accuracy;
-  daily.accuracy = Math.round(dailyAcc / daily.sessions);
-
-  if (!stats.recentSessions) stats.recentSessions = [];
-  stats.recentSessions.unshift({ wpm, accuracy, timestamp: Date.now(), wordsTyped });
-  if (stats.recentSessions.length > 20) stats.recentSessions = stats.recentSessions.slice(0, 20);
-
-  saveStats(stats);
 }
 
 export function loadStreak(): { current: number; best: number; lastPracticed: string } {
@@ -139,11 +147,6 @@ export default function StatisticsDashboard({ theme, refreshKey }: StatisticsDas
   useEffect(() => {
     refresh();
   }, [refresh, refreshKey]);
-
-  useEffect(() => {
-    const interval = setInterval(refresh, 2000);
-    return () => clearInterval(interval);
-  }, [refresh]);
 
   const isDark = theme === "dark";
   const last7Days = Array.from({ length: 7 }, (_, i) => {

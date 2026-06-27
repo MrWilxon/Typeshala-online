@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { lessons } from "@/data/lessons";
 import type { SetType } from "@/data/keyboardLayouts";
 
@@ -29,7 +30,7 @@ function getDifficultyColor(difficulty: number): string {
   return "#ec4899";
 }
 
-export default function LessonSelector({
+export default memo(function LessonSelector({
   keyboardType,
   setType,
   currentIndex,
@@ -163,4 +164,4 @@ export default function LessonSelector({
       )}
     </div>
   );
-}
+});

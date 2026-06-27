@@ -9,7 +9,6 @@ import StatisticsDashboard, { recordSession, updateStreak, loadStreak } from "./
 import Achievements, { checkAchievements } from "./Achievements";
 import TypingTest from "./TypingTest";
 import LessonSelector from "./LessonSelector";
-import { Header } from "./Header";
 import { HighScores } from "./HighScores";
 import { ToastNotifications } from "./ToastNotifications";
 import { TimerIcon, TrophyIcon, MoonIcon, SunIcon, VolumeIcon, VolumeXIcon, PauseIcon, PlayIcon, RotateCcwIcon, TypeIcon, BookIcon, BarChartIcon, HandIcon } from "./Icons";
@@ -102,6 +101,7 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
   const [toasts, setToasts] = useState<Array<{ id: number; achievement: { name: string; icon: string; description: string } }>>([]);
 
   const toastIdRef = useRef(0);
+  const handleSubmitScoreRef = useRef<() => void>(() => {});
 
   const showToast = useCallback((achievement: { name: string; icon: string; description: string }) => {
     const id = ++toastIdRef.current;
@@ -199,7 +199,7 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
     const bestScores: Record<string, { wpm: number; accuracy: number }> = bestRaw ? JSON.parse(bestRaw) : {};
     const prev = bestScores[key];
     if (!prev || wpm > prev.wpm || (wpm === prev.wpm && acc > prev.accuracy)) {
-      bestScores[key] = { wpm, accuracy };
+      bestScores[key] = { wpm, accuracy: acc };
       localStorage.setItem(`${STORAGE_PROGRESS}_best`, JSON.stringify(bestScores));
     }
     saveProgress({ currentLesson: currentIndex, completedLessons: completed });
@@ -243,6 +243,10 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
   }, [wpm, accuracy, typedString, currentString, setType, saveBestLocally, elapsed, showToast]);
 
   useEffect(() => {
+    handleSubmitScoreRef.current = handleSubmitScore;
+  }, [handleSubmitScore]);
+
+  useEffect(() => {
     typedLenRef.current = typedString.length;
   }, [typedString]);
 
@@ -258,27 +262,25 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
     if (practiceMode === "test" || isPaused) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      const keyCode = e.which || e.keyCode;
-
-      if (keyCode === 16) {
+      if (e.key === "Shift") {
         shiftHeldRef.current = true;
       }
 
-      if (keyCode >= 37 && keyCode <= 40) {
+      if (e.key === "ArrowUp" || e.key === "ArrowDown" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
         e.preventDefault();
         return;
       }
 
-      if (keyCode === 9) {
+      if (e.key === "Tab") {
         e.preventDefault();
         return;
       }
 
       resumeAudioContext();
 
-      setActiveKey(keyCode);
+      setActiveKey(e.keyCode);
 
-      if (keyCode === 8) {
+      if (e.key === "Backspace") {
         e.preventDefault();
         setTypedString((prev) => {
           const next = prev.slice(0, -1);
@@ -288,10 +290,7 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
         return;
       }
 
-      if (keyCode === 13 || keyCode >= 33 && keyCode <= 47 || keyCode >= 58 && keyCode <= 64 ||
-          keyCode >= 91 && keyCode <= 96 || keyCode >= 123 && keyCode <= 126 ||
-          keyCode >= 186 && keyCode <= 192 || keyCode >= 219 && keyCode <= 222 ||
-          (keyCode >= 48 && keyCode <= 90) || keyCode === 32) {
+      if (e.key.length === 1) {
         if (!startTimeRef.current) {
           const now = Date.now();
           startTimeRef.current = now;
@@ -333,7 +332,7 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
             if (soundEnabled) playCompleteSound();
             setShowComplete(true);
             completionTimeoutRef.current = setTimeout(() => {
-              handleSubmitScore();
+              handleSubmitScoreRef.current();
               if (practiceMode === "lessons") {
                 const nextIdx = (currentIndexRef.current + 1) % lessonStringsRef.current.length;
                 currentIndexRef.current = nextIdx;
@@ -361,11 +360,10 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
-      const keyCode = e.which || e.keyCode;
-      if (keyCode === 16) {
+      if (e.key === "Shift") {
         shiftHeldRef.current = false;
       }
-      if (shiftHeldRef.current && keyCode !== 16) {
+      if (shiftHeldRef.current && e.key !== "Shift") {
         return;
       }
       setActiveKey(0);
@@ -380,7 +378,7 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
       if (timerRef.current) clearInterval(timerRef.current);
       if (completionTimeoutRef.current) clearTimeout(completionTimeoutRef.current);
     };
-  }, [currentString, calculateStats, handleSubmitScore, soundEnabled, practiceMode, isPaused]);
+  }, [currentString, calculateStats, soundEnabled, practiceMode, isPaused]);
 
   const handleKeyClick = useCallback((char: string, keyCode: number) => {
     if (practiceMode === "test" || isPaused) return;
@@ -419,7 +417,7 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
           if (soundEnabled) playCompleteSound();
           setShowComplete(true);
           completionTimeoutRef.current = setTimeout(() => {
-            handleSubmitScore();
+            handleSubmitScoreRef.current();
             if (practiceMode === "lessons") {
               const nextIdx = (currentIndexRef.current + 1) % lessonStringsRef.current.length;
               currentIndexRef.current = nextIdx;
@@ -442,7 +440,7 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
       });
       if (soundEnabled) playKeySound();
     }
-  }, [currentString, calculateStats, handleSubmitScore, soundEnabled, practiceMode, isPaused]);
+  }, [currentString, calculateStats, soundEnabled, practiceMode, isPaused]);
 
   const handlePause = useCallback(() => {
     setIsPaused((p) => !p);
@@ -843,6 +841,7 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
                   value={customText}
                   onChange={(e) => handleCustomTextChange(e.target.value)}
                   placeholder="Type or paste your text here..."
+                  maxLength={5000}
                   style={{
                     width: "100%",
                     minHeight: 80,
@@ -857,6 +856,17 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
                     outline: "none",
                   }}
                 />
+              </div>
+            )}
+
+            {practiceMode === "lessons" && lessonStrings.length === 0 && (
+              <div style={{
+                textAlign: "center",
+                padding: 32,
+                fontSize: 13,
+                color: isDark ? "var(--muted-dark)" : "var(--muted-light)",
+              }}>
+                No lessons available for this keyboard layout and set type.
               </div>
             )}
 

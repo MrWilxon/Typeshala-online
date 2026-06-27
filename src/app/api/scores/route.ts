@@ -27,13 +27,23 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  if (wpm < 0 || wpm > 500 || accuracy < 0 || accuracy > 100) {
+    return NextResponse.json(
+      { error: "wpm must be 0-500, accuracy must be 0-100" },
+      { status: 400 }
+    );
+  }
+
+  const safeLesson = typeof lesson === "string" ? lesson.slice(0, 100) : "";
+  const safeSetType = typeof setType === "string" ? setType.slice(0, 50) : "";
+
   const maxId = scores.reduce((max, s) => Math.max(max, s.id), 0);
   const score: Score = {
     id: maxId + 1,
     wpm,
     accuracy,
-    lesson: lesson || "",
-    setType: setType || "",
+    lesson: safeLesson,
+    setType: safeSetType,
     createdAt: new Date().toISOString(),
   };
   scores.push(score);

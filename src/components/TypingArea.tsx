@@ -18,13 +18,14 @@ export default memo(function TypingArea({ originalString, typedString, keyboardT
   for (let i = 0; i < originalString.length; i++) {
     if (i < typedString.length) {
       const isCorrect = originalString[i] === typedString[i];
+      const isLatest = i === typedString.length - 1;
       chars.push(
         <span
           key={i}
           style={{
             color: isCorrect ? "var(--success)" : "var(--error)",
             position: "relative",
-            animation: "fadeIn 0.15s ease-out",
+            animation: isLatest ? "fadeIn 0.15s ease-out" : "none",
           }}
         >
           {isCorrect ? originalString[i] : (
