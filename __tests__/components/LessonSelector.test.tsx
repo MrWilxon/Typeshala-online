@@ -36,21 +36,14 @@ describe("LessonSelector", () => {
   });
 
   it("shows completed lessons with SVG checkmark", () => {
-    const enMidLessons = Object.keys(lessons).filter(
-      (k) => k.startsWith("en_") && lessons[k].setType === "midRow"
+    const { container } = render(
+      <LessonSelector
+        {...defaultProps}
+        completedLessons={["en_midRow_0"]}
+      />
     );
-    if (enMidLessons.length > 0) {
-      const { container } = render(
-        <LessonSelector
-          {...defaultProps}
-          completedLessons={[enMidLessons[0]]}
-        />
-      );
-      // Completed lesson has a green-tinted background via isCompleted
-      // The SVG checkmark (polyline) should be present
-      const svgCheckmarks = container.querySelectorAll("svg polyline");
-      expect(svgCheckmarks.length).toBeGreaterThanOrEqual(1);
-    }
+    const svgCheckmarks = container.querySelectorAll("svg polyline");
+    expect(svgCheckmarks.length).toBeGreaterThanOrEqual(1);
   });
 
   it("displays current note when provided", () => {

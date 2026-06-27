@@ -35,7 +35,12 @@ const defaultStats: StatsData = {
 };
 
 export function loadStats(): StatsData {
-  return loadFromStorage<StatsData>(STORAGE_STATS, defaultStats);
+  const raw = loadFromStorage<StatsData>(STORAGE_STATS, defaultStats);
+  return {
+    ...raw,
+    dailyStats: { ...raw.dailyStats },
+    recentSessions: [...raw.recentSessions],
+  };
 }
 
 function saveStats(stats: StatsData) {

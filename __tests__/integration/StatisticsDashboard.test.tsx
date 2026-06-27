@@ -47,7 +47,8 @@ describe("StatisticsDashboard", () => {
   describe("empty state", () => {
     it("shows zero stats when no data", () => {
       render(<StatisticsDashboard {...defaultProps} />);
-      expect(screen.getByText("0")).toBeInTheDocument();
+      const zeros = screen.getAllByText("0");
+      expect(zeros.length).toBeGreaterThanOrEqual(4);
     });
   });
 
@@ -134,6 +135,10 @@ describe("StatisticsDashboard", () => {
 });
 
 describe("statistics utility functions", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   describe("loadStats", () => {
     it("returns default stats when empty", () => {
       const stats = loadStats();

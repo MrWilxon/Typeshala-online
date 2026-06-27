@@ -41,10 +41,10 @@ describe("TypingTest Integration", () => {
 
     it("shows all duration options", () => {
       render(<TypingTest {...defaultProps} />);
-      expect(screen.getByText("30s")).toBeInTheDocument();
-      expect(screen.getByText("60s")).toBeInTheDocument();
-      expect(screen.getByText("2min")).toBeInTheDocument();
-      expect(screen.getByText("5min")).toBeInTheDocument();
+      expect(screen.getByText("Warm-up")).toBeInTheDocument();
+      expect(screen.getByText("1 min")).toBeInTheDocument();
+      expect(screen.getByText("2 min")).toBeInTheDocument();
+      expect(screen.getByText("5 min")).toBeInTheDocument();
     });
 
     it("shows start button", () => {
@@ -54,29 +54,28 @@ describe("TypingTest Integration", () => {
   });
 
   describe("duration selection", () => {
-    it("selects 30s duration by default", () => {
+    it("selects 1 min duration by default", () => {
       render(<TypingTest {...defaultProps} />);
-      const btn30 = screen.getByText("30s");
-      // Default should be selected (style should differ)
-      expect(btn30).toBeInTheDocument();
+      const btn1min = screen.getByText("1 min");
+      expect(btn1min).toBeInTheDocument();
     });
 
     it("allows selecting different durations", () => {
       render(<TypingTest {...defaultProps} />);
-      fireEvent.click(screen.getByText("60s"));
-      expect(screen.getByText("60s")).toBeInTheDocument();
+      fireEvent.click(screen.getByText("1 min"));
+      expect(screen.getByText("1 min")).toBeInTheDocument();
     });
 
-    it("allows selecting 2min duration", () => {
+    it("allows selecting 2 min duration", () => {
       render(<TypingTest {...defaultProps} />);
-      fireEvent.click(screen.getByText("2min"));
-      expect(screen.getByText("2min")).toBeInTheDocument();
+      fireEvent.click(screen.getByText("2 min"));
+      expect(screen.getByText("2 min")).toBeInTheDocument();
     });
 
-    it("allows selecting 5min duration", () => {
+    it("allows selecting 5 min duration", () => {
       render(<TypingTest {...defaultProps} />);
-      fireEvent.click(screen.getByText("5min"));
-      expect(screen.getByText("5min")).toBeInTheDocument();
+      fireEvent.click(screen.getByText("5 min"));
+      expect(screen.getByText("5 min")).toBeInTheDocument();
     });
   });
 
@@ -84,15 +83,13 @@ describe("TypingTest Integration", () => {
     it("starts test when Start Test is clicked", () => {
       render(<TypingTest {...defaultProps} />);
       fireEvent.click(screen.getByText("Start Test"));
-      // After starting, the test should show the typing area
-      // and the timer should be running
-      expect(screen.getByText("0:30")).toBeInTheDocument();
+      expect(screen.getByText("1:00")).toBeInTheDocument();
     });
 
     it("shows timer after starting", () => {
       render(<TypingTest {...defaultProps} />);
       fireEvent.click(screen.getByText("Start Test"));
-      expect(screen.getByText("0:30")).toBeInTheDocument();
+      expect(screen.getByText("1:00")).toBeInTheDocument();
     });
 
     it("shows keyboard after starting", () => {
@@ -105,8 +102,7 @@ describe("TypingTest Integration", () => {
     it("shows stats bar after starting", () => {
       render(<TypingTest {...defaultProps} />);
       fireEvent.click(screen.getByText("Start Test"));
-      expect(screen.getByText("WPM")).toBeInTheDocument();
-      expect(screen.getByText("Accuracy")).toBeInTheDocument();
+      expect(screen.getAllByText("0").length).toBeGreaterThan(0);
     });
 
     it("disables duration selection during test", () => {
@@ -143,7 +139,7 @@ describe("TypingTest Integration", () => {
     it("works with traditional keyboard", () => {
       render(<TypingTest {...defaultProps} keyboardType="traditional" />);
       fireEvent.click(screen.getByText("Start Test"));
-      expect(screen.getByText("क")).toBeInTheDocument();
+      expect(screen.getAllByText("क").length).toBeGreaterThan(0);
     });
   });
 

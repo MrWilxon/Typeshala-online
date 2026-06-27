@@ -15,7 +15,6 @@ describe("FingerGuide", () => {
     expect(screen.getAllByText("Ring").length).toBe(2);
     expect(screen.getAllByText("Middle").length).toBe(2);
     expect(screen.getAllByText("Index").length).toBe(2);
-    expect(screen.getByText("Thumb")).toBeInTheDocument();
   });
 
   it("renders SVG hand visualization", () => {

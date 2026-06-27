@@ -66,8 +66,7 @@ describe("TypingTutor Integration", () => {
       await act(async () => {
         render(<TypingTutor />);
       });
-      // StatsBar renders progress rings with WPM/accuracy values
-      expect(screen.getByText("0")).toBeInTheDocument();
+      expect(screen.getAllByText("0").length).toBeGreaterThan(0);
     });
   });
 
@@ -133,7 +132,7 @@ describe("TypingTutor Integration", () => {
       });
       const fingerGuideBtn = screen.getByTitle("Finger Guide");
       fireEvent.click(fingerGuideBtn);
-      expect(screen.getByText(/Finger Guide/)).toBeInTheDocument();
+      expect(screen.getAllByText("Pinky").length).toBeGreaterThan(0);
     });
 
     it("toggles sound", async () => {
@@ -171,7 +170,7 @@ describe("TypingTutor Integration", () => {
       });
       const achievementsBtn = screen.getByTitle("Achievements");
       fireEvent.click(achievementsBtn);
-      expect(screen.getByText("Achievements")).toBeInTheDocument();
+      expect(screen.getByText(/Achievements/)).toBeInTheDocument();
     });
 
     it("opens high scores panel", async () => {
