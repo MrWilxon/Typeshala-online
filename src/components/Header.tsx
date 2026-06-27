@@ -1,6 +1,6 @@
 "use client";
 
-import { SettingsIcon, TrophyIcon, MoonIcon, SunIcon, VolumeIcon, VolumeXIcon, PauseIcon, PlayIcon, RotateCcwIcon, TypeIcon, BookIcon, BarChartIcon, HandIcon } from "./Icons";
+import { SettingsIcon, TrophyIcon, MoonIcon, SunIcon, VolumeIcon, VolumeXIcon, PauseIcon, PlayIcon, RotateCcwIcon, TypeIcon, BookIcon, BarChartIcon, HandIcon, DownloadIcon } from "./Icons";
 
 export type Theme = "light" | "dark";
 export type PracticeMode = "lessons" | "custom" | "test";
@@ -202,6 +202,7 @@ export function Header({
             {soundEnabled ? <VolumeIcon /> : <VolumeXIcon />}
           </button>
           <button onClick={toggleTheme} style={btnStyle} title="Toggle theme">{isDark ? <SunIcon /> : <MoonIcon />}</button>
+          <a href="https://wilson.com.np/free-download-nepali-and-english-typeshala-for-windows-pc/" target="_blank" rel="noopener noreferrer" style={{ ...btnStyle, background: "linear-gradient(135deg, var(--primary), var(--accent))", color: "white", borderColor: "transparent", textDecoration: "none" }}><DownloadIcon /> Download</a>
           <button onClick={() => { setShowStats(!showStats); setShowAchievements(false); setShowScores(false); }} style={{ ...btnStyle, color: showStats ? "var(--primary)" : isDark ? "var(--accent)" : "var(--accent-dark)", borderColor: showStats ? "rgba(99,102,241,0.2)" : isDark ? "rgba(6,182,212,0.2)" : "rgba(8,145,178,0.2)" }} title="Statistics"><BarChartIcon /></button>
           <button onClick={() => { setShowAchievements(!showAchievements); setShowStats(false); setShowScores(false); }} style={{ ...btnStyle, color: showAchievements ? "var(--primary)" : isDark ? "var(--warning)" : "var(--primary)", borderColor: showAchievements ? "rgba(99,102,241,0.2)" : isDark ? "rgba(251,191,36,0.2)" : "rgba(99,102,241,0.2)" }} title="Achievements">🏆</button>
           <button onClick={() => { setShowScores(!showScores); setShowStats(false); setShowAchievements(false); }} style={{ ...btnStyle, color: showScores ? "var(--primary)" : isDark ? "var(--accent)" : "var(--accent-dark)", borderColor: showScores ? "rgba(99,102,241,0.2)" : isDark ? "rgba(6,182,212,0.2)" : "rgba(8,145,178,0.2)" }} title="High scores"><TrophyIcon /></button>
