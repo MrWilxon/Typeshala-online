@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Noto_Sans_Devanagari } from "next/font/google";
 import { SITE, SEO_KEYWORDS, ICON_SVG } from "@/lib/seo";
+import ClientLayout from "./ClientLayout";
 import "./globals.css";
 
 const inter = Inter({
@@ -117,7 +118,7 @@ export default function RootLayout({
         />
         <meta name="theme-color" content="#6366f1" />
       </head>
-      <body>{children}</body>
+      <body><ClientLayout>{children}</ClientLayout></body>
     </html>
   );
 }

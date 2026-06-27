@@ -118,6 +118,8 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
   const lessonStringsRef = useRef<string[]>([]);
   const shiftHeldRef = useRef(false);
   const completionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const wpmRef = useRef(0);
+  const accuracyRef = useRef(0);
   const lessonPrefix = keyboardType === "traditional" ? "ne" : "en";
 
   const currentString = practiceMode === "custom" && customText
@@ -140,10 +142,10 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
       setCurrentIndex(0);
       currentIndexRef.current = 0;
       lessonStringsRef.current = lessons;
+      wpmRef.current = 0;
+      accuracyRef.current = 0;
       setTypedString("");
       startTimeRef.current = null;
-      setWpm(0);
-      setAccuracy(0);
       setElapsed(0);
       setShowComplete(false);
       if (timerRef.current) clearInterval(timerRef.current);
@@ -175,8 +177,8 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
 
   const calculateStats = useCallback((typed: string, target: string) => {
     if (typed.length === 0) {
-      setAccuracy(0);
-      setWpm(0);
+      accuracyRef.current = 0;
+      wpmRef.current = 0;
       return;
     }
 
@@ -184,9 +186,13 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
     for (let i = 0; i < typed.length; i++) {
       if (i < target.length && typed[i] === target[i]) correct++;
     }
-    const acc = Math.floor((100 * correct) / typed.length);
-    setAccuracy(acc);
+    accuracyRef.current = Math.floor((100 * correct) / typed.length);
   }, []);
+
+  useEffect(() => {
+    setWpm(wpmRef.current);
+    setAccuracy(accuracyRef.current);
+  }, [typedString]);
 
   const saveBestLocally = useCallback((wpm: number, acc: number) => {
     const key = `${progressKey}_${currentIndex}`;
@@ -320,8 +326,9 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
           if (sTime) {
             const elapsedMinutes = (Date.now() - sTime) / 1000 / 60;
             if (elapsedMinutes > 0) {
-              const words = next.length / 5;
-              setWpm(Math.round(words / elapsedMinutes));
+              const charsPerWord = keyboardType === "traditional" ? 1 : 5;
+              const words = next.length / charsPerWord;
+              wpmRef.current = Math.round(words / elapsedMinutes);
             }
           }
 
@@ -345,8 +352,8 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
               }
               setTypedString("");
               startTimeRef.current = null;
-              setWpm(0);
-              setAccuracy(0);
+              wpmRef.current = 0;
+              accuracyRef.current = 0;
               setElapsed(0);
               setShowComplete(false);
             }, 1500);
@@ -407,8 +414,9 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
         if (sTime) {
           const elapsedMinutes = (Date.now() - sTime) / 1000 / 60;
           if (elapsedMinutes > 0) {
-            const words = next.length / 5;
-            setWpm(Math.round(words / elapsedMinutes));
+            const charsPerWord = keyboardType === "traditional" ? 1 : 5;
+            const words = next.length / charsPerWord;
+            wpmRef.current = Math.round(words / elapsedMinutes);
           }
         }
         calculateStats(next, targetStr);
@@ -430,8 +438,8 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
             }
             setTypedString("");
             startTimeRef.current = null;
-            setWpm(0);
-            setAccuracy(0);
+            wpmRef.current = 0;
+            accuracyRef.current = 0;
             setElapsed(0);
             setShowComplete(false);
           }, 1500);
@@ -447,10 +455,10 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
   }, []);
 
   const handleRestart = useCallback(() => {
+    wpmRef.current = 0;
+    accuracyRef.current = 0;
     setTypedString("");
     startTimeRef.current = null;
-    setWpm(0);
-    setAccuracy(0);
     setElapsed(0);
     setShowComplete(false);
     setIsPaused(false);
@@ -704,10 +712,10 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
               <button
                 onClick={() => {
                   setKeyboardType("traditional");
+                  wpmRef.current = 0;
+                  accuracyRef.current = 0;
                   setTypedString("");
                   startTimeRef.current = null;
-                  setWpm(0);
-                  setAccuracy(0);
                   setElapsed(0);
                   setShowComplete(false);
                 }}
@@ -732,10 +740,10 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
               <button
                 onClick={() => {
                   setKeyboardType("english");
+                  wpmRef.current = 0;
+                  accuracyRef.current = 0;
                   setTypedString("");
                   startTimeRef.current = null;
-                  setWpm(0);
-                  setAccuracy(0);
                   setElapsed(0);
                   setShowComplete(false);
                 }}

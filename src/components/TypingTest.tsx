@@ -80,8 +80,6 @@ export default function TypingTest({ keyboardType, theme, onComplete }: TypingTe
 
   const calculateStats = useCallback((typed: string, target: string) => {
     if (typed.length === 0) {
-      setAccuracy(0);
-      setWpm(0);
       accuracyRef.current = 0;
       wpmRef.current = 0;
       return;
@@ -91,9 +89,13 @@ export default function TypingTest({ keyboardType, theme, onComplete }: TypingTe
       if (i < target.length && typed[i] === target[i]) correct++;
     }
     const acc = Math.floor((100 * correct) / typed.length);
-    setAccuracy(acc);
     accuracyRef.current = acc;
   }, []);
+
+  useEffect(() => {
+    setWpm(wpmRef.current);
+    setAccuracy(accuracyRef.current);
+  }, [typedString]);
 
   const finalizeTest = useCallback((currentWpm: number, currentAccuracy: number, typed: string, elapsedSec: number) => {
     setFinalWpm(currentWpm);
@@ -101,12 +103,13 @@ export default function TypingTest({ keyboardType, theme, onComplete }: TypingTe
     setFinalCharsTyped(typed.length);
     setShowResults(true);
 
-    const wordsTyped = Math.floor(typed.length / 5);
+    const charsPerWord = language === "ne" ? 1 : 5;
+    const wordsTyped = Math.floor(typed.length / charsPerWord);
     recordSession(currentWpm, currentAccuracy, wordsTyped, elapsedSec);
     const newStreak = updateStreak();
     onComplete();
     checkAchievements();
-  }, [onComplete]);
+  }, [onComplete, language]);
 
   const startTest = useCallback(() => {
     const text = pickRandomText(language);
@@ -114,8 +117,6 @@ export default function TypingTest({ keyboardType, theme, onComplete }: TypingTe
     setTypedString("");
     setIsActive(true);
     setTimeLeft(duration);
-    setWpm(0);
-    setAccuracy(0);
     setElapsed(0);
     setShowResults(false);
     wpmRef.current = 0;
@@ -168,10 +169,9 @@ export default function TypingTest({ keyboardType, theme, onComplete }: TypingTe
           if (startTimeRef.current) {
             const elapsedMinutes = (Date.now() - startTimeRef.current) / 1000 / 60;
             if (elapsedMinutes > 0) {
-              const words = next.length / 5;
-              const newWpm = Math.round(words / elapsedMinutes);
-              setWpm(newWpm);
-              wpmRef.current = newWpm;
+              const charsPerWord = language === "ne" ? 1 : 5;
+              const words = next.length / charsPerWord;
+              wpmRef.current = Math.round(words / elapsedMinutes);
             }
           }
           return next;
@@ -189,10 +189,9 @@ export default function TypingTest({ keyboardType, theme, onComplete }: TypingTe
           if (startTimeRef.current) {
             const elapsedMinutes = (Date.now() - startTimeRef.current) / 1000 / 60;
             if (elapsedMinutes > 0) {
-              const words = next.length / 5;
-              const newWpm = Math.round(words / elapsedMinutes);
-              setWpm(newWpm);
-              wpmRef.current = newWpm;
+              const charsPerWord = language === "ne" ? 1 : 5;
+              const words = next.length / charsPerWord;
+              wpmRef.current = Math.round(words / elapsedMinutes);
             }
           }
 
@@ -239,10 +238,9 @@ export default function TypingTest({ keyboardType, theme, onComplete }: TypingTe
         if (startTimeRef.current) {
           const elapsedMinutes = (Date.now() - startTimeRef.current) / 1000 / 60;
           if (elapsedMinutes > 0) {
-            const words = next.length / 5;
-            const newWpm = Math.round(words / elapsedMinutes);
-            setWpm(newWpm);
-            wpmRef.current = newWpm;
+            const charsPerWord = language === "ne" ? 1 : 5;
+            const words = next.length / charsPerWord;
+            wpmRef.current = Math.round(words / elapsedMinutes);
           }
         }
         return next;
@@ -262,10 +260,9 @@ export default function TypingTest({ keyboardType, theme, onComplete }: TypingTe
         if (startTimeRef.current) {
           const elapsedMinutes = (Date.now() - startTimeRef.current) / 1000 / 60;
           if (elapsedMinutes > 0) {
-            const words = next.length / 5;
-            const newWpm = Math.round(words / elapsedMinutes);
-            setWpm(newWpm);
-            wpmRef.current = newWpm;
+            const charsPerWord = language === "ne" ? 1 : 5;
+            const words = next.length / charsPerWord;
+            wpmRef.current = Math.round(words / elapsedMinutes);
           }
         }
         return next;
