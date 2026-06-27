@@ -61,36 +61,38 @@ export const lessons: LessonsMap = {
   en_low6: { string: "box fix maze jinx vault comb zinc", setType: "lowRow", difficulty: 4, language: "en" },
 
   // Nepali lessons (Preeti keyboard layout)
+  // Latin key -> Nepali character mapping for Preeti:
   // Top row: q=क w=ख e=ग r=घ t=ङ y=च u=छ i=ज o=झ p=ञ [=ट ]=ड \=ण
-  ne_top1: { string: "qw er ty ui op [] \\", setType: "topRow", difficulty: 1, language: "ne", note: "Preeti top row basics - pairs of keys" },
-  ne_top2: { string: "qwe rty uio p[] \\", setType: "topRow", difficulty: 1, language: "ne", note: "Three-key patterns for top row" },
-  ne_top3: { string: "qwert yuiop []\\", setType: "topRow", difficulty: 2, language: "ne", note: "Full top row sequences" },
-  ne_top4: { string: "qw er ty ui op qw er ty ui op", setType: "topRow", difficulty: 2, language: "ne" },
-  ne_top5: { string: "qwe rty uio p[] qwe rty uio p[]", setType: "topRow", difficulty: 2, language: "ne" },
-  ne_top6: { string: "oiu ytr ewq p[] \\ oiu ytr ewq", setType: "topRow", difficulty: 3, language: "ne" },
-
   // Mid row: a=त s=थ d=द f=ध g=न h=प j=फ k=ब l=भ ;=म '=य
-  ne_mid1: { string: "as df gh jk l; '", setType: "midRow", difficulty: 1, language: "ne" },
-  ne_mid2: { string: "asdf ghjk l;'", setType: "midRow", difficulty: 1, language: "ne" },
-  ne_mid3: { string: "as df gh jk l; 'y as df gh jk", setType: "midRow", difficulty: 2, language: "ne" },
-  ne_mid4: { string: "asdfgh jkl;' asdfgh jkl;'", setType: "midRow", difficulty: 2, language: "ne" },
-  ne_mid5: { string: ";lkj hgf dsa ;' lkj hgf dsa", setType: "midRow", difficulty: 3, language: "ne" },
-
   // Low row: z=र x=ल c=व v=श b=ष n=स m=ह ,=अ .=इ /=उ
-  ne_low1: { string: "zx cv bn m, ./", setType: "lowRow", difficulty: 1, language: "ne" },
-  ne_low2: { string: "zxcv bnm ,./", setType: "lowRow", difficulty: 1, language: "ne" },
-  ne_low3: { string: "zx cv bn m, ./ zx cv bn m,", setType: "lowRow", difficulty: 2, language: "ne" },
-  ne_low4: { string: "zxcvbnm,./ zxcvbnm,./ zxcvbnm", setType: "lowRow", difficulty: 2, language: "ne" },
-  ne_low5: { string: "/. ,mn bvc xz /. ,mn bvc xz", setType: "lowRow", difficulty: 3, language: "ne" },
+  // Lesson strings below use actual Nepali characters (the visual output)
 
-  // All keys - words that form meaningful Nepali text in Preeti font
-  // q=क a=त z=र ;=म x=ल g=न d=द h=प
-  // Common Nepali words in Preeti: q;x=कमल, g;l=नमल, ;'/x=म्यल
-  ne_all1: { string: "q;x g;l hg. hg. q;x g;l", setType: "allKeys", difficulty: 3, language: "ne" },
-  ne_all2: { string: "df;x g;lt df;x g;lt df;x g;lt", setType: "allKeys", difficulty: 3, language: "ne" },
-  ne_all3: { string: "q;x g;l hg. dfl; xf; g]kfn", setType: "allKeys", difficulty: 4, language: "ne" },
-  ne_all4: { string: "q;x g;l hg. dfl; xf; g]kfn jf ;'/x", setType: "allKeys", difficulty: 4, language: "ne" },
-  ne_all5: { string: "q;x g;l hg. dfl; xf; g]kfn jf ;'/x l;h{gx? l;h{gx?", setType: "allKeys", difficulty: 5, language: "ne" },
+  ne_top1: { string: "कख गघ ङच छज झञ टड ण", setType: "topRow", difficulty: 1, language: "ne", note: "Preeti top row basics - pairs of keys" },
+  ne_top2: { string: "कखग घङच छजझञ टडण", setType: "topRow", difficulty: 1, language: "ne", note: "Three-key patterns for top row" },
+  ne_top3: { string: "कखगघङ चछजझञ टडण", setType: "topRow", difficulty: 2, language: "ne", note: "Full top row sequences" },
+  ne_top4: { string: "कख गघ ङच छज कख गघ ङच छज", setType: "topRow", difficulty: 2, language: "ne" },
+  ne_top5: { string: "कखग घङच छजझ कखग घङच छजझ", setType: "topRow", difficulty: 2, language: "ne" },
+  ne_top6: { string: "झजछ चङघ गखक टडण झजछ चङघ गखक", setType: "topRow", difficulty: 3, language: "ne" },
+
+  ne_mid1: { string: "तथ दध नप फब भम य", setType: "midRow", difficulty: 1, language: "ne" },
+  ne_mid2: { string: "तथदध नपफब भमय", setType: "midRow", difficulty: 1, language: "ne" },
+  ne_mid3: { string: "तथ दध नप फब भमय तथ दध नप", setType: "midRow", difficulty: 2, language: "ne" },
+  ne_mid4: { string: "तथदधनप फबभमय तथदधनप फबभमय", setType: "midRow", difficulty: 2, language: "ne" },
+  ne_mid5: { string: "मभबफ पनधद थत मय भबफ पनधद थत", setType: "midRow", difficulty: 3, language: "ne" },
+
+  ne_low1: { string: "रल वश षस हअ इउ", setType: "lowRow", difficulty: 1, language: "ne" },
+  ne_low2: { string: "रलवश षसह अइउ", setType: "lowRow", difficulty: 1, language: "ne" },
+  ne_low3: { string: "रल वश षस हअ इउ रल वश षस हअ", setType: "lowRow", difficulty: 2, language: "ne" },
+  ne_low4: { string: "रलवशषसहअइउ रलवशषसहअइउ रलवशषसहअइउ", setType: "lowRow", difficulty: 2, language: "ne" },
+  ne_low5: { string: "उइअ हसषशव लर उइअ हसषशव लर", setType: "lowRow", difficulty: 3, language: "ne" },
+
+  // All keys - meaningful Nepali words using Preeti mapping
+  // कमल (q;x), नमल (g;l), म्यल (;'/x), दम (df;)
+  ne_all1: { string: "कमल नमल हइ हइ कमल नमल", setType: "allKeys", difficulty: 3, language: "ne" },
+  ne_all2: { string: "दमकल नमलत दमकल नमलत दमकल नमलत", setType: "allKeys", difficulty: 3, language: "ne" },
+  ne_all3: { string: "कमल नमल हइ दमभ लशभ नकबस", setType: "allKeys", difficulty: 4, language: "ne" },
+  ne_all4: { string: "कमल नमल हइ दमभ लशभ नकबस फब म्यल", setType: "allKeys", difficulty: 4, language: "ne" },
+  ne_all5: { string: "कमल नमल हइ दमभ लशभ नकबस फब म्यल भमहइनक भमहइनक", setType: "allKeys", difficulty: 5, language: "ne" },
 
   ne_num1: { string: "123 123 123 123 123 123", setType: "numRow", difficulty: 1, language: "ne" },
   ne_num2: { string: "456 456 456 456 456 456", setType: "numRow", difficulty: 1, language: "ne" },
@@ -98,21 +100,21 @@ export const lessons: LessonsMap = {
   ne_num4: { string: "135 246 357 468 579 680", setType: "numRow", difficulty: 2, language: "ne" },
   ne_num5: { string: "987 876 765 654 543 432", setType: "numRow", difficulty: 2, language: "ne" },
 
-  ne_top7: { string: "qwe rty uio qwe rty uio p[] \\", setType: "topRow", difficulty: 2, language: "ne" },
-  ne_top8: { string: "oip ytr ewq oip ytr ewq p[] \\", setType: "topRow", difficulty: 3, language: "ne" },
-  ne_top9: { string: "qwe rt yu io p[] qwe rt yu io p[] \\", setType: "topRow", difficulty: 3, language: "ne" },
+  ne_top7: { string: "कखग घङच कखग घङच टडण", setType: "topRow", difficulty: 2, language: "ne" },
+  ne_top8: { string: "झञछ चङघ गखक झञछ चङघ गखक टडण", setType: "topRow", difficulty: 3, language: "ne" },
+  ne_top9: { string: "कखग घङ चछ जझ टडण कखग घङ चछ ज� टडण", setType: "topRow", difficulty: 3, language: "ne" },
 
-  ne_mid6: { string: "as df gh jk l; 'y as df gh jk l; 'y", setType: "midRow", difficulty: 2, language: "ne" },
-  ne_mid7: { string: "lkj hgf dsa ;'lkj hgf dsa ;'lkj hgf", setType: "midRow", difficulty: 3, language: "ne" },
-  ne_mid8: { string: "asdf ghjk l;' yasdf ghjk l;' y", setType: "midRow", difficulty: 3, language: "ne" },
+  ne_mid6: { string: "तथ दध नप फब भमय तथ दध नप फब भमय", setType: "midRow", difficulty: 2, language: "ne" },
+  ne_mid7: { string: "भबफप नधदथत मयभबफप नधदथत मयभबफप", setType: "midRow", difficulty: 3, language: "ne" },
+  ne_mid8: { string: "तथदध नपफब भमयतथदध नपफब भमय", setType: "midRow", difficulty: 3, language: "ne" },
 
-  ne_low6: { string: "zx cv bn m, ./ zx cv bn m, ./", setType: "lowRow", difficulty: 2, language: "ne" },
-  ne_low7: { string: "/. ,mn bvc xz /. ,mn bvc xz", setType: "lowRow", difficulty: 3, language: "ne" },
-  ne_low8: { string: "zx cv bn m, ./ zx cv bn m, ./", setType: "lowRow", difficulty: 3, language: "ne" },
+  ne_low6: { string: "रल वश षस हअ इउ रल वश षस हअ इउ", setType: "lowRow", difficulty: 2, language: "ne" },
+  ne_low7: { string: "उइअ हसषशव लर उइअ हसषशव लर", setType: "lowRow", difficulty: 3, language: "ne" },
+  ne_low8: { string: "रल वश षस हअ इउ रल वश षस हअ इउ", setType: "lowRow", difficulty: 3, language: "ne" },
 
-  ne_all6: { string: "q;x g;l hg. dfl; xf; g]kfn", setType: "allKeys", difficulty: 3, language: "ne" },
-  ne_all7: { string: "q;x g;l hg. dfl; xf; g]kfn jf ;'/x", setType: "allKeys", difficulty: 4, language: "ne" },
-  ne_all8: { string: "q;x g;l hg. dfl; xf; g]kfn jf ;'/x l;h{gx?", setType: "allKeys", difficulty: 4, language: "ne" },
+  ne_all6: { string: "कमल नमल हइ दमभ लशभ नकबस", setType: "allKeys", difficulty: 3, language: "ne" },
+  ne_all7: { string: "कमल नमल हइ दमभ लशभ नकबस फब म्यल", setType: "allKeys", difficulty: 4, language: "ne" },
+  ne_all8: { string: "कमल नमल हइ दमभ लशभ नकबस फब म्यल भमहइनक भमहइनक", setType: "allKeys", difficulty: 4, language: "ne" },
 };
 
 export function getLessonsByType(setType: SetType, language: "en" | "ne" = "en"): string[] {

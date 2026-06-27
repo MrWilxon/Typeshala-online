@@ -96,7 +96,7 @@ describe("TypingTest Integration", () => {
       render(<TypingTest {...defaultProps} />);
       fireEvent.click(screen.getByText("Start Test"));
       // Keyboard should be visible
-      expect(screen.getByText("q")).toBeInTheDocument();
+      expect(screen.getAllByText("q").length).toBeGreaterThan(0);
     });
 
     it("shows stats bar after starting", () => {
@@ -133,7 +133,7 @@ describe("TypingTest Integration", () => {
     it("works with English keyboard", () => {
       render(<TypingTest {...defaultProps} keyboardType="english" />);
       fireEvent.click(screen.getByText("Start Test"));
-      expect(screen.getByText("q")).toBeInTheDocument();
+      expect(screen.getAllByText("q").length).toBeGreaterThan(0);
     });
 
     it("works with traditional keyboard", () => {
