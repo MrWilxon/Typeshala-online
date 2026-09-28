@@ -11,7 +11,8 @@ import TypingTest from "./TypingTest";
 import LessonSelector from "./LessonSelector";
 import { HighScores } from "./HighScores";
 import { ToastNotifications } from "./ToastNotifications";
-import { TimerIcon, TrophyIcon, MoonIcon, SunIcon, VolumeIcon, VolumeXIcon, PauseIcon, PlayIcon, RotateCcwIcon, TypeIcon, BookIcon, BarChartIcon, HandIcon } from "./Icons";
+import { EmbedCode } from "./EmbedCode";
+import { TimerIcon, TrophyIcon, MoonIcon, SunIcon, VolumeIcon, VolumeXIcon, PauseIcon, PlayIcon, RotateCcwIcon, TypeIcon, BookIcon, BarChartIcon, HandIcon, MaximizeIcon, MinimizeIcon, CodeIcon, DownloadIcon } from "./Icons";
 import { getLessonsByType, lessons } from "@/data/lessons";
 import type { SetType } from "@/data/keyboardLayouts";
 import { saveScore, getScores } from "@/lib/api";
@@ -96,6 +97,8 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
   const [showFingerGuide, setShowFingerGuide] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
+  const [showEmbed, setShowEmbed] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [streak, setStreak] = useState({ current: 0, best: 0 });
   const [refreshKey, setRefreshKey] = useState(0);
   const [toasts, setToasts] = useState<Array<{ id: number; achievement: { name: string; icon: string; description: string } }>>([]);
@@ -111,6 +114,7 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
     }, 4000);
   }, []);
 
+  const containerRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const typedLenRef = useRef(0);
   const startTimeRef = useRef<number | null>(null);
@@ -485,6 +489,22 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
     });
   }
 
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, []);
+
+  const toggleFullscreen = useCallback(() => {
+    if (!document.fullscreenElement) {
+      containerRef.current?.requestFullscreen?.().catch(() => {});
+    } else {
+      document.exitFullscreen?.();
+    }
+  }, []);
+
   const isDark = theme === "dark";
 
   const pageStyle: React.CSSProperties = {
@@ -624,7 +644,7 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
   );
 
   return (
-    <div style={pageStyle}>
+    <div ref={containerRef} style={pageStyle}>
       {/* Tier 1: Primary navigation */}
       <header style={{
         ...glassStyle,
@@ -682,13 +702,41 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
           {/* Spacer */}
           <div style={{ flex: 1 }} />
 
+          {/* Download for Windows */}
+          <a
+            href="https://wilson.com.np/free-download-nepali-and-english-typeshala-for-windows-pc/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              padding: "5px 12px",
+              borderRadius: 6,
+              fontSize: 11,
+              fontWeight: 600,
+              fontFamily: "var(--font-sans)",
+              color: "white",
+              textDecoration: "none",
+              background: "linear-gradient(135deg, var(--primary), var(--accent))",
+              flexShrink: 0,
+              whiteSpace: "nowrap",
+            }}
+            title="Download Typeshala for Windows PC"
+          >
+            <DownloadIcon />
+            <span>Download for Windows</span>
+          </a>
+
           {/* Utility icons */}
           <div style={{ display: "flex", alignItems: "center", gap: 1 }}>
             {iconBtn(() => setSoundEnabled(s => !s), soundEnabled ? <VolumeIcon /> : <VolumeXIcon />, "Sound", soundEnabled, isDark ? "rgba(34,197,94,0.12)" : "rgba(34,197,94,0.08)")}
             {iconBtn(toggleTheme, isDark ? <SunIcon /> : <MoonIcon />, "Theme")}
-            {iconBtn(() => { setShowStats(s => !s); setShowAchievements(false); setShowScores(false); }, <BarChartIcon />, "Stats", showStats)}
-            {iconBtn(() => { setShowAchievements(s => !s); setShowStats(false); setShowScores(false); }, <span style={{ fontSize: 13 }}>🏆</span>, "Achievements", showAchievements)}
-            {iconBtn(() => { setShowScores(s => !s); setShowStats(false); setShowAchievements(false); }, <TrophyIcon />, "Scores", showScores)}
+            {iconBtn(toggleFullscreen, isFullscreen ? <MinimizeIcon /> : <MaximizeIcon />, isFullscreen ? "Exit Focus Mode" : "Focus Mode (Fullscreen)", isFullscreen)}
+            {iconBtn(() => { setShowEmbed(s => !s); setShowStats(false); setShowAchievements(false); setShowScores(false); }, <CodeIcon />, "Embed this app", showEmbed)}
+            {iconBtn(() => { setShowStats(s => !s); setShowAchievements(false); setShowScores(false); setShowEmbed(false); }, <BarChartIcon />, "Stats", showStats)}
+            {iconBtn(() => { setShowAchievements(s => !s); setShowStats(false); setShowScores(false); setShowEmbed(false); }, <span style={{ fontSize: 13 }}>🏆</span>, "Achievements", showAchievements)}
+            {iconBtn(() => { setShowScores(s => !s); setShowStats(false); setShowAchievements(false); setShowEmbed(false); }, <TrophyIcon />, "Scores", showScores)}
           </div>
         </div>
 
@@ -1053,9 +1101,9 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
           </>
         )}
 
-        {(showStats || showAchievements || showScores) && (
+        {(showStats || showAchievements || showScores || showEmbed) && (
           <div
-            onClick={() => { setShowStats(false); setShowAchievements(false); setShowScores(false); }}
+            onClick={() => { setShowStats(false); setShowAchievements(false); setShowScores(false); setShowEmbed(false); }}
             style={{
               position: "fixed",
               inset: 0,
@@ -1086,7 +1134,7 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
               }}
             >
               <button
-                onClick={() => { setShowStats(false); setShowAchievements(false); setShowScores(false); }}
+                onClick={() => { setShowStats(false); setShowAchievements(false); setShowScores(false); setShowEmbed(false); }}
                 style={{
                   position: "absolute",
                   top: 12,
@@ -1113,6 +1161,7 @@ export default function TypingTutor({ initialKeyboardType = "traditional" }: { i
                 {showStats && <StatisticsDashboard theme={theme} refreshKey={refreshKey} />}
                 {showAchievements && <Achievements theme={theme} refreshKey={refreshKey} />}
                 {showScores && <HighScores scores={mergedScores} theme={theme} />}
+                {showEmbed && <EmbedCode keyboardType={keyboardType} theme={theme} />}
               </div>
             </div>
           </div>
